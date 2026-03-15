@@ -1,0 +1,11 @@
+{
+  "name": "passline-challenge-tests",
+  "version": "1.0.0",
+  "description": "Tests para la evaluación de QA Automation",
+  "main": "index.js",
+  "scripts": { "test": "playwright test" },
+  "devDependencies": {
+    "@playwright/test": "^1.42.1",
+    "@types/node": "^20.11.24"
+  }
+}
