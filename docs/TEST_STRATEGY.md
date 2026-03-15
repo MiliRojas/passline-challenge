@@ -46,4 +46,3 @@ These tests provide fast feedback about the system’s health.
 - Regression testing
 
 These cases will be automated after the MVP, once the system becomes more stable and requirements are better defined.
-
