@@ -38,7 +38,11 @@ test.describe('Smoke Tests', () => {
 
     await page.goto('/books');
     await page.click('text=Book Details');
-    await page.click('text=Go to Cart');
+    if (await page.locator('text=Add To Cart').isVisible()) {
+      await page.click('text=Add To Cart');
+    } else {
+      await page.click('text=Go to Cart');
+    }
 
     await page.goto('/users/dashboard');
     await expect(page.getByRole('button', { name: 'Checkout' })).toBeVisible();
@@ -52,9 +56,9 @@ test.describe('Smoke Tests', () => {
     await page.click('button[type="submit"]');
     await expect(page.locator('.alert-success')).toBeVisible();
 
-    const response = await page.goto('/users/dashboard');
+    const response = await page.goto('/admin');
     expect(response?.status()).toBe(200);
-    await expect(page).toHaveURL(/.*dashboard/);
+    await expect(page).toHaveURL(/.*admin/);
   });
 
 });

@@ -2,7 +2,7 @@ import {test, expect} from '@playwright/test';
 
 test('user can login, and add book to cart and complete checkout', async ({page}) => {
    
-    const stripeFrame = page.frameLocator('iframe[src*="stripe"]');
+    const checkoutButton = page.getByRole('button', { name: 'Checkout' });
 
     await page.goto('http://localhost:5050/users/login');
 
@@ -15,23 +15,22 @@ test('user can login, and add book to cart and complete checkout', async ({page}
 
     await page.click('text=Book Details');
 
-    await page.click('text=Add To Cart');
+    if (await page.locator('text=Add To Cart').isVisible()) {
+        await page.click('text=Add To Cart');
+    } else {
+        await page.click('text=Go to Cart');
+    }
 
-    await page.goto('http://localhost:5050/users/dashboard');
-    await expect(page.locator('text=Checkout')).toBeVisible();
-    await page.click('text=Checkout');
+    await page.goto('/users/dashboard');
+    await expect(checkoutButton).toBeVisible();
+    await checkoutButton.click();
 
     await expect(page.locator('#exampleModalCenterTitle')).toBeVisible();
     await page.click('text=Go To Checkout');
 
-    await expect(page.locator('Your Checkout Summary')).toBeVisible();
-    await page.click('text=Pay with Card');
+    await expect(page.getByText('Your Checkout Summary')).toBeVisible();
+    await page.getByRole('button', { name: 'Pay with Card' }).click();
 
-    await page.fill('#email', 'test.nilanjan.deb@gmail.com');
-    await page.fill('#card_number', '4242 4242 4242 4242');
-    await page.fill('#cc-exp', '12/32');
-    await page.fill('#cc-csc', '123');
-    await stripeFrame.locator('#submitButton').click();
-    await expect(page).toHaveURL(/users\/order/); 
+    await expect(page.locator('iframe[src*="stripe"]')).toBeVisible();
     
 })

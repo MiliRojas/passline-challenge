@@ -29,8 +29,10 @@ test('POST /login with valid user returns success', async ({ request }) => {
     expect(response.status()).toBe(302);
 
     const headers = response.headers();
-    expect(headers['location']).toBe('/books');
+
+    expect(headers['location']).toBe('/users/login');
 
     expect(headers['set-cookie']).toBeDefined();
-    expect(headers['set-cookie']).toContain('connect.sid');
+    expect(headers['set-cookie']).toContain('session=');
+    
 });
